@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Radio Jockey</title>
+    </head>
+    <body>
+        <h1>Radio Jockey</h1>
+        <p>Direct streams for popular radio stations. Useful for MPD and other
+        software that can't cope with the PLS files provided by BBC.</p>
+        <ul>
+        {% for sid, station in stations.items() %}
+            <li><a href="{{ url_for('station', sid=sid) }}">{{ station.name }}</a></li>
+        {% endfor %}
+        </ul>
+    </body>
+</html>
