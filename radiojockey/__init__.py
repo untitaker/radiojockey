@@ -4,8 +4,6 @@ import requests
 import io
 import ConfigParser
 
-cache = Cache()
-
 def get_bbc_one():
     pls = requests.get('http://www.bbc.co.uk/radio/listen/live/r1_aaclca.pls')
     parser = ConfigParser.SafeConfigParser()
@@ -20,14 +18,9 @@ radiostations = {
     }
 }
 
-@cache.memoize(3600)
-def url_for_radiostation(sid):
-    return radiostations[sid]['function']()
-
 def mk_app(config):
     app = Flask('radiojockey')
     app.config.update(config)
-    cache.init_app(app)
 
     @app.route('/')
     def index():
@@ -35,6 +28,7 @@ def mk_app(config):
 
     @app.route('/station/<sid>')
     def station(sid):
-        return redirect(url_for_radiostation(sid), code=302)
+        url = radiostations[sid]['function']()
+        return redirect(url, code=302)
 
     return app
